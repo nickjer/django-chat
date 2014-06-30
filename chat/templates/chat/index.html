@@ -1,0 +1,67 @@
+{% load staticfiles %}
+
+<html>
+<head>
+  <title>Django Chat Example</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script>
+    var msg_id;
+    var timer;
+
+    $(document).ready(function() {
+      msg_id = 0;
+      updateMsg();
+      $("form#chatform").submit(function() {
+        clearTimeout(timer);
+        $.post("{% url 'chat:send' %}", {
+          message: $("#msg").val(),
+          name: $("#name").val(),
+          action: "postmsg",
+          msg_id: msg_id,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        }, function(json) {
+          $("#msg").val('');
+          addMessages(json);
+        });
+        timer = setTimeout('updateMsg()', 4000);
+        return false;
+      });
+    });
+
+    function addMessages(json) {
+      msg_id = json.msg_id;
+      $.each(json.msgs, function(i, item) {
+          if ($(".msg").length == 10) {
+            $("#messagewindow span:last-child").remove();
+          }
+          $("#messagewindow").prepend("<span class=\"msg\"><b>" + item.author__name + "</b>: " + item.msg_text + "</span>");
+      });
+    }
+
+    function updateMsg() {
+      $.post("{% url 'chat:msgs' %}", { 
+        msg_id: msg_id,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      }, function(json) {
+        $("#loading").remove();
+        addMessages(json);
+      });
+      timer = setTimeout('updateMsg()', 4000);
+    }
+  </script>
+  <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}" />
+</head>
+
+<body>
+  <div id="wrapper">
+  <form id="chatform">
+    {% csrf_token %}
+    Name: <input type="text" id="name" />
+    Message: <input type="text" id="msg" />
+    <input type="submit" value="ok" /><br />
+  </form>
+  <p id="messagewindow"><span id="loading">Loading...</span></p>
+  </div>
+</body>
+</html>
+
