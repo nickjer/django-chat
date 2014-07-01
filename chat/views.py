@@ -20,7 +20,7 @@ def msgs(request):
 
             msg_w_auth = Msg.objects.filter(id__gt=m_id).order_by('-id').values('id', 'msg_text', 'author__name')[:10]
     
-            msg_list = list(msg_w_auth)
+            msg_list = list(msg_w_auth) # Great way to populate cache
             msg_list.reverse()
             try:
                 m_id = msg_list[-1]['id']
@@ -47,9 +47,8 @@ def send(request):
             author_name = form.cleaned_data['name']
             msg_text = form.cleaned_data['message']
 
-            # Check if user already exists before creating
-            auth = Author.objects.get_or_create(name=author_name)[0]
-            auth.msg_set.create(msg_text=msg_text)
+            new_auth = Author.objects.add_author(author_name)
+            new_auth.add_msg(msg_text)
 
             return msgs(request) # Display msgs
         else:
