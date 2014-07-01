@@ -1,12 +1,8 @@
 import json
-import datetime
-from time import strftime
 from django.shortcuts import render
 from django.views import generic
 from django.http import HttpResponse
 from django.utils.cache import patch_cache_control
-from django.utils import timezone
-from django.utils.timezone import utc
 
 from chat.models import Msg, Author
 
