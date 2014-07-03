@@ -1,3 +1,4 @@
+import html
 from django.db import models
 
 class AuthManager(models.Manager):
@@ -12,7 +13,8 @@ class AuthManager(models.Manager):
         Check if author exists before adding them
         Then return this author
         """
-        new_auth = Author.objects.get_or_create(name=author_name)[0]
+        author_name_esc = html.escape(author_name) # Escape HTML code in author name
+        new_auth = Author.objects.get_or_create(name=author_name_esc)[0]
 
         return new_auth
 
@@ -42,7 +44,8 @@ class Author(models.Model):
 
     def add_msg(self, msg_text):
         "Add msg for this author."
-        self.msg_set.create(msg_text=msg_text)
+        msg_text_esc = html.escape(msg_text) # Escape HTML code in msg
+        self.msg_set.create(msg_text=msg_text_esc)
 
 class Msg(models.Model):
     author = models.ForeignKey(Author)
