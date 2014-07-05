@@ -23,9 +23,8 @@ def msgs(request):
             msg_author = Msg.objects.latest_msgs(m_id, 10).values('id', 'msg_text', 'author__name')
     
             msg_list = list(msg_author) # Great way to populate cache
-            msg_list.reverse() # Necessary for output of msgs to be chronological
             try:
-                m_id = msg_list[-1]['id'] # Retrieve last msg id
+                m_id = msg_list[0]['id'] # Retrieve last msg id
             except (IndexError):
                 pass
 

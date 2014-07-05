@@ -13,3 +13,4 @@ class MsgForm(forms.Form):
         css = {
             'all': ('chat/style.css',)
         }
+        js = ('chat/chat.js',)
