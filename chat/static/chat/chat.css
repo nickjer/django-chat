@@ -1,0 +1,21 @@
+#wrapper {
+	border: 2px solid lightgrey;
+	border-radius: 15px;
+	padding: 5px;
+	width: 600px;
+}
+
+#messageWindow {
+	height: 200px;
+	overflow: auto;
+}
+
+.chatMessage {
+}
+
+.messageAuthor {
+	font-weight: bold;
+}
+
+.messageText {
+}

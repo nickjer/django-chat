@@ -24,9 +24,8 @@ $(function() {
 			"msg_id": msg_id
 		};
 		$.get(Context.get_url, data_to_send, function(data) {
-			$('#loading').remove();
 			var chat_text = getChatText(data);
-			$('#messagewindow').prepend(chat_text);
+			$('#messageWindow').prepend(chat_text);
 			msg_timer = window.setTimeout(chatGetMessages, 4000);
 		});
 	};
@@ -38,16 +37,18 @@ $(function() {
 			msg_id = data[0].id;
 
 			$.each(data, function(i, item) {
-				if ($('.msg').length == 10) {
-					$('#messagewindow span:last-child').remove();
+				if ($('.chatMessage').length == 10) {
+					$('.chatMessage:last-child').remove();
 				}
 
-				to_append.push('<span class="msg">');
-				to_append.push('<b>');
+				to_append.push('<div class="chatMessage">');
+				to_append.push('<span class="messageAuthor">');
 				to_append.push(item.author__name);
-				to_append.push('</b>: ');
+				to_append.push('</span>');
+				to_append.push('<span class="messageText">: ');
 				to_append.push(item.msg_text);
 				to_append.push('</span>');
+				to_append.push('</div>');
 			});
 		}
 

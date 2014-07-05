@@ -11,6 +11,6 @@ class MsgForm(forms.Form):
 
     class Media:
         css = {
-            'all': ('chat/style.css',)
+            'all': ('chat/chat.css',)
         }
         js = ('chat/chat.js',)
