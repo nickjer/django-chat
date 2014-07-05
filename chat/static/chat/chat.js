@@ -7,11 +7,11 @@ $(function() {
 			var data_to_send = {
 				"name": $('#name').val(),
 				"message": $('#msg').val(),
-				"csrfmiddlewaretoken": Context.csrf_token,
-				"msg_id": msg_id,
+				"csrfmiddlewaretoken": Context.csrf_token
 			};
-			$.post(Context.send_url, data_to_send, function(data) {
-				$('#msg').attr('value', "");
+			$.post(Context.send_url, data_to_send, function() {
+				$('#msg').val('');
+				clearTimeout(msg_timer);
 				chatGetMessages();
 			});
 		}
@@ -23,11 +23,11 @@ $(function() {
 			"csrfmiddlewaretoken": Context.csrf_token,
 			"msg_id": msg_id
 		};
-		$.post(Context.get_url, data_to_send, function(data) {
+		$.get(Context.get_url, data_to_send, function(data) {
 			$('#loading').remove();
 			var chatText = getChatText(data);
 			$('#messagewindow').prepend(chatText);
-			window.setTimeout(chatGetMessages, 1000);
+			msg_timer = window.setTimeout(chatGetMessages, 4000);
 		});
 	};
 
@@ -38,7 +38,7 @@ $(function() {
 
 		$.each(data.msgs, function(i, item) {
 			if ($('.msg').length == 10) {
-				$('messagewindow span:last-child').remove();
+				$('#messagewindow span:last-child').remove();
 			}
 
 			to_append.push('<span class="msg">');
@@ -54,5 +54,5 @@ $(function() {
 
 	$('#chatform').submit(chatSendAction);
 
-	window.setTimeout(chatGetMessages, 0);
+	msg_timer = window.setTimeout(chatGetMessages, 0);
 });

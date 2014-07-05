@@ -14,8 +14,8 @@ class IndexView(generic.FormView):
 
 def msgs(request):
     "List all messages in json format starting just after the last msg_id"
-    if request.method == 'POST': # Check if form has been submitted
-        form = ListMsgsForm(request.POST)
+    if request.method == 'GET': # Check if form has been submitted
+        form = ListMsgsForm(request.GET)
         if form.is_valid(): # All validation rules pass (msg_id is int)
             m_id = form.cleaned_data['msg_id']
 
@@ -59,8 +59,6 @@ def send(request):
             new_auth = Author.objects.add_author(author_name)
             new_auth.add_msg(msg_text)
 
-            return msgs(request) # Display msgs
-        else:
-            return HttpResponse('', content_type='text/json') # Return nothing
+            return HttpResponse('') # Return nothing
     else:
         raise Http404
