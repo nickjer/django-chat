@@ -8,8 +8,9 @@ from django.utils.cache import patch_cache_control
 from chat.models import Msg, Author
 from chat.forms import MsgForm, ListMsgsForm
 
-class IndexView(generic.TemplateView):
+class IndexView(generic.FormView):
     template_name = 'chat/index.html'
+    form_class = MsgForm
 
 def msgs(request):
     "List all messages in json format starting just after the last msg_id"

@@ -49,15 +49,14 @@
       timer = setTimeout('updateMsg()', 4000);
     }
   </script>
-  <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}" />
+  {{ form.media }}
 </head>
 
 <body>
   <div id="wrapper">
   <form id="chatform">
     {% csrf_token %}
-    Name: <input type="text" id="name" />
-    Message: <input type="text" id="msg" />
+    {{ form }}
     <input type="submit" value="ok" /><br />
   </form>
   <p id="messagewindow"><span id="loading">Loading...</span></p>
