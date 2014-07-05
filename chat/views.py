@@ -21,19 +21,11 @@ def msgs(request):
 
             # Get 10 latest msgs since ``m_id``
             msg_author = Msg.objects.latest_msgs(m_id, 10).values('id', 'msg_text', 'author__name')
-    
-            msg_list = list(msg_author) # Great way to populate cache
-            try:
-                m_id = msg_list[0]['id'] # Retrieve last msg id
-            except (IndexError):
-                pass
+            # Convert msgs to list
+            msg_list = list(msg_author)
 
-            # Record last msg id and list of msgs
-            data = {'msg_id': m_id}
-            data['msgs'] = msg_list 
-    
             # Format data into json
-            data_json = json.dumps(data, indent=2)
+            data_json = json.dumps(msg_list, indent=2)
 
             # Output response as json content
             response = HttpResponse(data_json, content_type='text/json')

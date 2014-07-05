@@ -25,8 +25,8 @@ $(function() {
 		};
 		$.get(Context.get_url, data_to_send, function(data) {
 			$('#loading').remove();
-			var chatText = getChatText(data);
-			$('#messagewindow').prepend(chatText);
+			var chat_text = getChatText(data);
+			$('#messagewindow').prepend(chat_text);
 			msg_timer = window.setTimeout(chatGetMessages, 4000);
 		});
 	};
@@ -34,20 +34,22 @@ $(function() {
 	var getChatText = function(data) {
 		var to_append = [];
 
-		msg_id = data.msg_id;
+		if ( data.length ) {
+			msg_id = data[0].id;
 
-		$.each(data.msgs, function(i, item) {
-			if ($('.msg').length == 10) {
-				$('#messagewindow span:last-child').remove();
-			}
+			$.each(data, function(i, item) {
+				if ($('.msg').length == 10) {
+					$('#messagewindow span:last-child').remove();
+				}
 
-			to_append.push('<span class="msg">');
-			to_append.push('<b>');
-			to_append.push(item.author__name);
-			to_append.push('</b>: ');
-			to_append.push(item.msg_text);
-			to_append.push('</span>');
-		});
+				to_append.push('<span class="msg">');
+				to_append.push('<b>');
+				to_append.push(item.author__name);
+				to_append.push('</b>: ');
+				to_append.push(item.msg_text);
+				to_append.push('</span>');
+			});
+		}
 
 		return to_append.join("");
 	};
