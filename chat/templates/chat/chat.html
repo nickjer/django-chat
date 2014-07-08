@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+{% block jquery_js %}
+    <!-- JQuery Library javascript --!>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block chat_js %}
+    <!-- Chat AJAX script --!>
+    <script type="text/javascript">
+        getContext = function() {
+            return {
+                "csrf_token": "{{ csrf_token }}",
+                "get_url": "{% url 'chat:msgs' %}",
+                "send_url": "{% url 'chat:send' %}",
+            }
+        }
+    </script>
+    <script type="text/javascript" src="{% static "chat/chat.js" %}"></script>
+{% endblock %}
+
+{% block chat_css %}
+    <!-- Chat css style sheet --!>
+    <link href="{% static "chat/chat.css" %}" type="text/css" media="all" rel="stylesheet" />
+{% endblock %}
+
+{% block html %}
+    <!-- HTML chat container --!>
+    <div id="chatWrapper">
+        <form id="chatForm">
+            {{ chat_form }}
+            <input type="submit" value="ok" /><br />
+        </form>
+        <div id="messageWindow"></div>
+    </div>
+{% endblock %}

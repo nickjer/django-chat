@@ -8,9 +8,3 @@ class MsgForm(forms.Form):
     "Basic form for accepting message from author"
     name = forms.CharField(max_length=25, widget=forms.TextInput(attrs={'id': 'name'}))
     message = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'id': 'msg'}))
-
-    class Media:
-        css = {
-            'all': ('chat/chat.css',)
-        }
-        js = ('chat/chat.js',)

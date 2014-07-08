@@ -55,7 +55,7 @@ $(function() {
 		return to_append.join("");
 	};
 
-	$('#chatform').submit(chatSendAction);
+	$('#chatForm').submit(chatSendAction);
 
 	msg_timer = window.setTimeout(chatGetMessages, 0);
 });
