@@ -20,7 +20,6 @@ $(function() {
 
 	var chatGetMessages = function() {
 		var data_to_send = {
-			"csrfmiddlewaretoken": Context.csrf_token,
 			"msg_id": msg_id
 		};
 		$.get(Context.get_url, data_to_send, function(data) {
