@@ -8,9 +8,8 @@ from django.utils.cache import patch_cache_control
 from chat.models import Msg, Author
 from chat.forms import MsgForm, ListMsgsForm
 
-class IndexView(generic.FormView):
+class IndexView(generic.TemplateView):
     template_name = 'chat/index.html'
-    form_class = MsgForm
 
 def msgs(request):
     "List all messages in json format starting just after the last msg_id"
@@ -42,15 +41,15 @@ def msgs(request):
 
 def send(request):
     "Input the user and msg into database then follow up by requesting latest msgs"
-    if request.method == 'POST': # Check if form has been submitted
-        form = MsgForm(request.POST)
-        if form.is_valid(): # All validation rules pass
-            author_name = form.cleaned_data['name']
-            msg_text = form.cleaned_data['message']
+    # Check if user is authenticated
+    if request.user.is_authenticated():
+        if request.method == 'GET': # Check if form has been submitted
+            form = MsgForm(request.GET)
+            if form.is_valid(): # All validation rules pass
+                author_name = form.cleaned_data['name']
+                msg_text = form.cleaned_data['message']
 
-            new_auth = Author.objects.add_author(author_name)
-            new_auth.add_msg(msg_text)
+                new_auth = Author.objects.add_author(author_name)
+                new_auth.add_msg(msg_text)
 
-            return HttpResponse('') # Return nothing
-    else:
-        raise Http404
+    return HttpResponse('') # Return nothing
