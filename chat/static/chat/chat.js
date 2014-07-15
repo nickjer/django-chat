@@ -5,7 +5,6 @@ $(function() {
 	var chatSendAction = function(event) {
 		if ($('#msg').val() != "") {
 			var data_to_send = {
-				"name": $('#name').val(),
 				"message": $('#msg').val(),
 				"csrfmiddlewaretoken": Context.csrf_token
 			};
@@ -43,7 +42,7 @@ $(function() {
 
 				to_append.push('<div class="chatMessage">');
 				to_append.push('<span class="messageAuthor">');
-				to_append.push(item.author__name);
+				to_append.push(item.author__username);
 				to_append.push('</span>');
 				to_append.push('<span class="messageText">: ');
 				to_append.push(item.msg_text);

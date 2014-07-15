@@ -1,11 +1,11 @@
 import json
+import html
 from django.shortcuts import render
 from django.views import generic
 from django.http import HttpResponse
-from django.http import Http404
 from django.utils.cache import patch_cache_control
 
-from chat.models import Msg, Author
+from chat.models import Msg
 from chat.forms import MsgForm, ListMsgsForm
 
 class IndexView(generic.TemplateView):
@@ -19,7 +19,7 @@ def msgs(request):
             m_id = form.cleaned_data['msg_id']
 
             # Get 10 latest msgs since ``m_id``
-            msg_author = Msg.objects.latest_msgs(m_id, 10).values('id', 'msg_text', 'author__name')
+            msg_author = Msg.objects.latest_msgs(m_id, 10).values('id', 'msg_text', 'author__username')
             # Convert msgs to list
             msg_list = list(msg_author)
 
@@ -37,19 +37,17 @@ def msgs(request):
             pass
     else:
         pass
-    raise Http404
+    return HttpResponse('') # Return nothing
 
 def send(request):
     "Input the user and msg into database then follow up by requesting latest msgs"
     # Check if user is authenticated
     if request.user.is_authenticated():
-        if request.method == 'GET': # Check if form has been submitted
-            form = MsgForm(request.GET)
+        if request.method == 'POST': # Check if form has been submitted
+            form = MsgForm(request.POST)
             if form.is_valid(): # All validation rules pass
-                author_name = form.cleaned_data['name']
                 msg_text = form.cleaned_data['message']
 
-                new_auth = Author.objects.add_author(author_name)
-                new_auth.add_msg(msg_text)
+                request.user.msg_set.create(msg_text=html.escape(msg_text))
 
     return HttpResponse('') # Return nothing
